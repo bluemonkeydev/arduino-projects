@@ -1,7 +1,10 @@
 #include "Arduino.h"
 
-const int LED_PIN = 13;
-const int SENSOR_PIN = 7;
+//const int LED_PIN = 13;
+//const int SENSOR_PIN = 7;
+const int LED_PIN = 2;
+const int SENSOR_PIN = 0;
+
 const int SIGNAL_OUTPUT_PIN = 6;
 
 void setup() {
@@ -9,7 +12,7 @@ void setup() {
 
   pinMode(LED_PIN, OUTPUT);
   pinMode(SENSOR_PIN, INPUT);
-  pinMode(SIGNAL_OUTPUT_PIN, OUTPUT);
+//  pinMode(SIGNAL_OUTPUT_PIN, OUTPUT);
 }
 
 unsigned long onMillis = 0;
@@ -30,7 +33,7 @@ boolean vibration = false;
 void loop() {
   unsigned long currentMillis = millis();
   int newSensorVal = digitalRead(SENSOR_PIN);
-  digitalWrite(SIGNAL_OUTPUT_PIN, newSensorVal);
+//  digitalWrite(SIGNAL_OUTPUT_PIN, newSensorVal);
   if (newSensorVal == HIGH) {
     offTimer = true;  // make sure timer's on
     offMillis = currentMillis; // reset timer
