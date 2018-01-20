@@ -37,7 +37,6 @@ void writeSignal(int i)
     digitalWrite(selB, LOW);
     digitalWrite(selA, HIGH);
     digitalWrite(enable, HIGH);
-    Serial.println("Green LED 1: HIGH");
   
   }else if (i == 2) {
     digitalWrite(enable, LOW);
