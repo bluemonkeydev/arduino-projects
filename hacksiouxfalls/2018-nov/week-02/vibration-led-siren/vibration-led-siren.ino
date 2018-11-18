@@ -34,11 +34,19 @@ void loop() {
   
   int vibs = analogRead(A0);
   
-  int level = map(vibs, 400, 1024, 0, 100);
+  int level = map(vibs, 0, 1024, 0, 100);
 
-  Serial.print("level: ");
-  Serial.println(level);
-
+//  Serial.print("level: ");
+  Serial.print(level);
+  Serial.print(":");
+  for (int i = 0; i < level; i++) {
+    if (i > 90) {
+      Serial.print("*");
+    } else {
+      Serial.print("-");
+    }
+  }
+  Serial.println();
   if (level > 90) {
     isTonePlaying = true;
     isLedBlinking = true;
