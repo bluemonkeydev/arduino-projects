@@ -5,10 +5,10 @@ const int BUTTON_PIN = 11;
 void setup() {
   Serial.begin(9600);
   pinMode(A0, INPUT);
-
   pinMode(SPEAKER_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
+  delay(15000);
 }
 
 boolean isTonePlaying = false;
@@ -29,7 +29,7 @@ void loop() {
     isLedBlinking = false;
     digitalWrite(LED_PIN, LOW);
     noTone(9);
-    delay(5000);
+    delay(10000);
   }
   
   int vibs = analogRead(A0);
@@ -40,14 +40,14 @@ void loop() {
   Serial.print(level);
   Serial.print(":");
   for (int i = 0; i < level; i++) {
-    if (i > 90) {
+    if (i > 95) {
       Serial.print("*");
     } else {
       Serial.print("-");
     }
   }
   Serial.println();
-  if (level > 90) {
+  if (level > 95) {
     isTonePlaying = true;
     isLedBlinking = true;
   } else if (level > 40) {
