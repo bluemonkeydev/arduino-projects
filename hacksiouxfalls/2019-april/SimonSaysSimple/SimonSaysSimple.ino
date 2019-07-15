@@ -2,13 +2,10 @@ int DELAY = 3500;
 int LED_DELAY = 250;
 
 int buttonCount = 4;
-//int buttons[] = {4,6,8,10};
-//int leds[] = {7,5,11,9};
 
-int leds[] = {2,4,6,8};
-int buttons[] = {3,5,7,9};
+int leds[] = {3,5,7,9};
+int buttons[] = {2,4,6,8};
 
-//int pattern[] = {0,1,2,3,0,1,2,3,0,1};
 int pattern[] = {0,2,3,1,1,2,3,0,0,1};
 int level = 1;
 int maxLevel = 10;
@@ -21,7 +18,7 @@ void setup() {
   for (int i = 0; i < buttonCount; i++) {
     pinMode(buttons[i], INPUT);
   }
-//  testButtons();
+  testButtons();
   blinkAll();
 }
 
@@ -123,6 +120,3 @@ void loop() {
     level++;
   }
 }
-
-
-
