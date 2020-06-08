@@ -22,7 +22,7 @@ boolean encoder_freq = true; // or PWM when false
 volatile long encoderValue_freq = 128;
 
 // pwm (timer1)
-volatile long encoderValue_pwm = 128;
+volatile long encoderValue_pwm = 10;
 
 int timer1Divider = 1;
 int timer2Divider = 1;
@@ -36,29 +36,8 @@ int lastSwitchValue = -1;
 boolean updateDisplay = true;
 
 int timer1ValueMap(int encoderValue) {
-  if (encoderValue == 2) { // 0%
-    return 0;
-  } else if (encoderValue <= 25 ) { // 10%
-    return 25;
-  } else if (encoderValue <= 51 ) { // 20%
-    return 51;
-  } else if (encoderValue <= 64 ) { // 25%
-    return 64;
-  } else if (encoderValue <= 102 ) { // 40%
-    return 102;
-  } else if (encoderValue <= 128 ) { // 50%
-    return 128;
-  } else if (encoderValue <= 154 ) { // 60%
-    return 154;
-  } else if (encoderValue <= 192 ) { // 75%
-    return 192;
-  } else if (encoderValue <= 205 ) { // 80%
-    return 205;
-  } else if (encoderValue <= 230 ) { // 90%
-    return 230;
-  } else { // 100%
-    return 256;
-  }
+  float mapped = 256 * ((float)encoderValue / 20);
+  return (int)mapped;
 }
 
 void drawDisplay(String freq1, String freq2) {
@@ -88,9 +67,6 @@ void drawDisplay(String freq1, String freq2) {
     }
   } else {
     display.drawCircle(5, display.height()-10, 3, WHITE);
-    if (fastEncoder) {
-      display.fillCircle(5, display.height()-10, 3, WHITE);
-    }
   }
 
   // right indicator (frequency)
@@ -100,7 +76,7 @@ void drawDisplay(String freq1, String freq2) {
   display.drawLine(display.width() - 3,lineHeight,display.width() - 3, display.height() - 1, WHITE);
 
   // bottom indicator (pwm)
-  int lineWidth = map(timer1ValueMap(encoderValue_pwm), 256, 2, 0, display.width()-8);
+  int lineWidth = map(timer1ValueMap(encoderValue_pwm), 256, 0, 1, display.width()-9);
   display.drawLine(4,display.height()-1,lineWidth+4, display.height() - 1, WHITE);
   display.drawLine(4,display.height()-2,lineWidth+4, display.height() - 2, WHITE);
   display.display();
@@ -186,13 +162,15 @@ void loop() {
     prevMillis_BUTTON = currentMillis; // start timer
     encoderSwitchPressed = true;
   }
-
+  
   if (encoderSwitchPressed == true && digitalRead(encoderSwitchPin) == HIGH) {
     // button released
     unsigned long duration = currentMillis - prevMillis_BUTTON;
-    if (duration < 200) {
+    if (duration < 300) {
       // short press / change speed
-      fastEncoder = !fastEncoder;
+      if (encoder_freq) { // only change if on freq
+        fastEncoder = !fastEncoder;
+      }
     } else {
       // long press / change modes
       encoder_freq = !encoder_freq;
@@ -372,14 +350,14 @@ boolean updateEncoder() {
     } else {
       // pwm mode
       if (up) {
-        encoderValue_pwm = encoderValue_pwm + 16;
-        if (encoderValue_pwm > 256) {
-          encoderValue_pwm = 256;
+        encoderValue_pwm++;
+        if (encoderValue_pwm > 20) {
+          encoderValue_pwm = 20;
         }
       } else {
-        encoderValue_pwm = encoderValue_pwm - 16;
-        if (encoderValue_pwm < 1) {
-          encoderValue_pwm = 1;
+        encoderValue_pwm--;
+        if (encoderValue_pwm < 0) {
+          encoderValue_pwm = 0;
         }
       }
     }
